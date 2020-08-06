@@ -7,8 +7,8 @@ import axios from 'axios'
 */
 axios.get('https://api.github.com/users/cearc-sara')
   .then(response => {
-    cardMaker(response.data)
-    debugger
+    const card = cardMaker(response.data)
+    cards.appendChild(card)
   })
   .catch(error => {
     console.log(error)
@@ -43,7 +43,8 @@ const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigkne
 followersArray.forEach(follower => {
   axios.get(`https://api.github.com/users/${follower}`)
   .then(response =>{
-    cardMaker(response.data)
+    const card = cardMaker(response.data)
+    cards.appendChild(card)
   })
   .catch(error => {
     console.log(error)
@@ -56,10 +57,12 @@ axios.get('https://api.github.com/users/cearc-sara/followers')
   .then(response => {
     const followersArray = response.data
     followersArray.forEach(follower => {
-      cardMaker(follower)
+     const card = cardMaker(follower)
+      cards.appendChild(card)
     })
     .catch(error => {
       console.log(error)
+      debugger
     })
   })
 
@@ -82,7 +85,7 @@ axios.get('https://api.github.com/users/cearc-sara/followers')
       </div>
     </div>
 */
-
+const cards = document.querySelector('.cards')
 
 function cardMaker(object){
   const card = document.createElement('div')
@@ -126,8 +129,8 @@ function cardMaker(object){
   cardInfo.appendChild(bio)
 
 
-  const cards = document.querySelector('.cards')
-  cards.appendChild(card)
+  
+  
 
   return card
 
