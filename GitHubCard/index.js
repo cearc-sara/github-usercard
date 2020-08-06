@@ -7,9 +7,11 @@ import axios from 'axios'
 */
 axios.get('https://api.github.com/users/cearc-sara')
   .then(response => {
-
+    cardMaker(response.data)
+    debugger
   })
   .catch(error => {
+    console.log(error)
     debugger
   })
 /*
@@ -36,7 +38,30 @@ axios.get('https://api.github.com/users/cearc-sara')
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+followersArray.forEach(follower => {
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(response =>{
+    cardMaker(response.data)
+  })
+  .catch(error => {
+    console.log(error)
+    debugger
+  })
+})
+
+//stretch get followers from github instead of manually putting in the array items
+axios.get('https://api.github.com/users/cearc-sara/followers')
+  .then(response => {
+    const followersArray = response.data
+    followersArray.forEach(follower => {
+      cardMaker(follower)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  })
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -57,6 +82,8 @@ const followersArray = [];
       </div>
     </div>
 */
+
+
 function cardMaker(object){
   const card = document.createElement('div')
   const image = document.createElement('img')
@@ -76,6 +103,33 @@ function cardMaker(object){
   username.classList.add('username')
 
   image.src = object.avatar_url
+  gitHubAddress.href = object.url
+
+  name.textContent = object.name
+  username.textContent = object.login
+  location.textContent = `Location: ${object.location}`
+  profile.textContent = `Profile: `
+  gitHubAddress.textContent = object.url
+  followers.textContent = `Followers: ${object.followers}`
+  following.textContent = `Following: ${object.following}`
+  bio.textContent = `Bio: ${object.bio}`
+
+  card.appendChild(image)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(username)
+  cardInfo.appendChild(location)
+  cardInfo.appendChild(profile)
+  profile.appendChild(gitHubAddress)
+  cardInfo.appendChild(followers)
+  cardInfo.appendChild(following)
+  cardInfo.appendChild(bio)
+
+
+  const cards = document.querySelector('.cards')
+  cards.appendChild(card)
+
+  return card
 
 }
 /*
